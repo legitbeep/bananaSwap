@@ -1,13 +1,13 @@
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
-  title: "nextchakra-starter",
-  titleTemplate: "%s | nextchakra-starter",
-  defaultTitle: "nextchakra-starter",
+  title: "BananaSwap",
+  titleTemplate: "%s | BananaSwap",
+  defaultTitle: "BananaSwap",
   description: "Next.js + Chakra-ui + TypeScript template",
   canonical: "",
   openGraph: {
     url: "",
-    title: "nextchakra-starter",
+    title: "BananaSwap",
     description: "Next.js + chakra-ui + TypeScript template",
     images: [
       // {
@@ -15,7 +15,7 @@ const defaultSEOConfig = {
       //   alt:
       // },
     ],
-    site_name: "nextchakra-starter",
+    site_name: "BananaSwap",
   },
   twitter: {
     cardType: "summary_large_image",
