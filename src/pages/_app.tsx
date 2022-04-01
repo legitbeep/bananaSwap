@@ -9,6 +9,9 @@ import Layout from "components/layout";
 import customTheme from "styles/customTheme";
 import "styles/globals.css";
 
+import { Web3ReactProvider } from '@web3-react/core';
+import { getLibrary } from 'utils/connect';
+
 function MyApp({
   Component,
   pageProps,
@@ -19,9 +22,11 @@ function MyApp({
           <meta name="viewport" content="minimum-scale=1, maximum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover" />
         </Head>
         <DefaultSeo {...defaultSeoConfig} />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Web3ReactProvider>
       </ChakraProvider>
   );
 }
