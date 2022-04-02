@@ -1,16 +1,12 @@
-import { Box } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
-import TextSection from "components/TextSection";
-import CTASection from "components/CTASection";
-import ImageSection from "components/ImageSection";
+import Swap from 'views/swap';
 
 const Home = () => {
   return (
-    <Box mb={8} w="full">
-      <TextSection />
-      <ImageSection />
-      <CTASection />
-    </Box>
+    <Flex mb={8} w="full" justifyContent="center" py="8">
+      <Swap />
+    </Flex>
   );
 };
 

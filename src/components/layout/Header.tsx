@@ -7,6 +7,7 @@ import { formatEther } from '@ethersproject/units';
 import ThemeToggle from "./ThemeToggle";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import { injected, fetcher } from 'utils'
+import { shortenAddress } from 'utils';
 
 const Header = () => {
   
@@ -60,11 +61,11 @@ const Header = () => {
   return (
     <Flex as="header" width="full" align="center">
       <Heading as="h1" size="md">
-        <Link href="/">BananaSwap</Link>
+        <Link href="/">uSwap</Link>
       </Heading>
   
       <Box marginLeft="auto">
-        <Button onClick={connect} mr={3}>{account ? account?.slice(0,5)+"..."+account?.slice(-4) + " | " + ( balance ? parseFloat(formatEther(balance)).toPrecision(4) : "...") + " ETH" : "Connect"}</Button>
+        <Button onClick={connect} mr={3}>{account ? shortenAddress(account) + " | " + ( balance ? parseFloat(formatEther(balance)).toPrecision(4) : "...") + " ETH" : "Connect"}</Button>
         <ThemeToggle />
       </Box>
     </Flex>

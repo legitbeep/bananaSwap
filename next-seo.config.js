@@ -1,13 +1,13 @@
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
-  title: "BananaSwap",
-  titleTemplate: "%s | BananaSwap",
-  defaultTitle: "BananaSwap",
+  title: "uSwap",
+  titleTemplate: "%s | uSwap",
+  defaultTitle: "uSwap",
   description: "Next.js + Chakra-ui + TypeScript template",
   canonical: "",
   openGraph: {
     url: "",
-    title: "BananaSwap",
+    title: "uSwap",
     description: "Next.js + chakra-ui + TypeScript template",
     images: [
       // {
@@ -15,7 +15,7 @@ const defaultSEOConfig = {
       //   alt:
       // },
     ],
-    site_name: "BananaSwap",
+    site_name: "uSwap",
   },
   twitter: {
     cardType: "summary_large_image",
