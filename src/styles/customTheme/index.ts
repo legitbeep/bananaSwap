@@ -19,7 +19,6 @@ const customTheme = extendTheme({
         })
     },
     initialColorMode: 'dark',
-    useSystemColorMode: false,
 });
 
 export default customTheme;
