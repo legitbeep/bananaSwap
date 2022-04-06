@@ -2,7 +2,7 @@ import * as chains from './chains';
 
 // If you add coins for a new network, make sure Weth address (for the router you are using) is the first entry
 
-const AUTONITYCoins = [
+export const AUTONITYCoins = [
   {
     name: "Auton",
     abbr: "AUT",
@@ -35,7 +35,7 @@ const AUTONITYCoins = [
   }
 ]
 
-const DEVNETCoins = [
+export const DEVNETCoins = [
   {
     name: "Auton",
     abbr: "AUT",
@@ -58,7 +58,7 @@ const DEVNETCoins = [
   }
 ]
 
-const PARASTATECoins = [
+export const PARASTATECoins = [
   {
     name: "Ether",
     abbr: "ETH",
@@ -87,7 +87,7 @@ const PARASTATECoins = [
   }
 ]
 
-const GANACHECoins = [
+export const GANACHECoins = [
   {
     name: "Ether",
     abbr: "ETH",
@@ -116,7 +116,7 @@ const GANACHECoins = [
   }
 ]
 
-const MAINNETCoins = [
+export const MAINNETCoins = [
   {
     name: "Ether",
     abbr: "ETH",
@@ -134,11 +134,11 @@ const MAINNETCoins = [
   },
 ]
 
-const ROPSTENCoins = [
+export const ROPSTENCoins = [
   {
     name: "Ether",
     abbr: "ETH",
-    address: "", // Weth address is fetched from the router
+    address: "0xc778417E063141139Fce010982780140Aa0cD5Ab", // Weth address is fetched from the router
   },
   {
     name: "Dai",
@@ -152,7 +152,7 @@ const ROPSTENCoins = [
   },
 ]
 
-const KOVANCoins = [
+export const KOVANCoins = [
   {
     name: "Ether",
     abbr: "ETH",
@@ -170,7 +170,7 @@ const KOVANCoins = [
   },
 ]
 
-const RINKEBYCoins = [
+export const RINKEBYCoins = [
   {
     name: "Ether",
     abbr: "ETH",
@@ -188,7 +188,7 @@ const RINKEBYCoins = [
   },
 ]
 
-const GÖRLICoins = [
+export const GÖRLICoins = [
   {
     name: "Ether",
     abbr: "ETH",
@@ -217,15 +217,4 @@ COINS.set(chains.ChainId.DEVNET, DEVNETCoins);
 COINS.set(chains.ChainId.PARASTATE, PARASTATECoins);
 COINS.set(chains.ChainId.GANCHE, GANACHECoins)
 
-
-const Coins = {
-  [chains.ChainId.ROPSTEN]: ROPSTENCoins,
-  [chains.ChainId.RINKEBY]: RINKEBYCoins,
-  [chains.ChainId.GÖRLI]: GÖRLICoins,
-  [chains.ChainId.KOVAN]: KOVANCoins,
-  [chains.ChainId.AUTONITY]: AUTONITYCoins,
-  [chains.ChainId.DEVNET]: DEVNETCoins,
-  [chains.ChainId.PARASTATE]: PARASTATECoins,
-  [chains.ChainId.GANCHE]: GANACHECoins
-  }
 export default COINS

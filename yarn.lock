@@ -1885,7 +1885,7 @@
   "resolved" "https://registry.npmjs.org/@ethersproject/logger/-/logger-5.6.0.tgz"
   "version" "5.6.0"
 
-"@ethersproject/networks@^5.6.0":
+"@ethersproject/networks@^5.6.0", "@ethersproject/networks@^5.6.1":
   "integrity" "sha512-b2rrupf3kCTcc3jr9xOWBuHylSFtbpJf79Ga7QR98ienU2UqGimPGEsYMgbI29KHJfA5Us89XwGVmxrlxmSrMg=="
   "resolved" "https://registry.npmjs.org/@ethersproject/networks/-/networks-5.6.1.tgz"
   "version" "5.6.1"
