@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Flex, Heading, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, useToast, Tooltip } from "@chakra-ui/react";
 import Link from "next/link";
 import useSWR, { mutate } from 'swr';
 import { formatEther } from '@ethersproject/units';
@@ -65,7 +65,9 @@ const Header = () => {
       </Heading>
   
       <Box marginLeft="auto">
-        <Button onClick={connect} mr={3}>{account ? shortenAddress(account) + " | " + ( balance ? parseFloat(formatEther(balance)).toPrecision(4) : "...") + " ETH" : "Connect"}</Button>
+        <Tooltip borderRadius="14px" p="2" label={( balance ? parseFloat(formatEther(balance)).toPrecision(4) : "...") + " ETH" }>
+          <Button onClick={connect} mr={3}>{account ? shortenAddress(account) : "Connect"}</Button>
+        </Tooltip>
         <ThemeToggle />
       </Box>
     </Flex>

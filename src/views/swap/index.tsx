@@ -1,26 +1,29 @@
 import { Box, useToast, Flex, Button, Heading } from '@chakra-ui/react'
 import { useWeb3React } from '@web3-react/core';
 import CurrencyInput from 'components/CurrencyInput'
-import { useState } from 'react';
-import { getSigner, SwapTokens } from 'utils';
+import { useState, useContext, useEffect } from 'react';
+import { Coin } from 'type';
+import { SwapTokens, getReserves } from 'utils';
 
 import COINS from 'utils/constants/coins';
-
-const coins:any = COINS;
+import { Contracts } from 'context/Contracts';
+import { Contract } from '@ethersproject/contracts';
+import { JsonRpcSigner } from '@ethersproject/providers';
 
 const Swap = () => {
 
     const [amnt1, setAmnt1] = useState("");
     const [amnt2, setAmnt2] = useState("");
 
-    const [cur1, setCur1] = useState("");
-    const [cur2, setCur2] = useState("");
+    const [cur1, setCur1] = useState<Coin>();
+    const [cur2, setCur2] = useState<Coin>();
 
     const [reserves, setReserves] = useState(["0.0", "0.0"]);
 
     const [loading, setLoading] = useState(false);
 
-    const { account, library, ...web3React } = useWeb3React();
+    const { account, library, chainId, ...web3React } = useWeb3React();
+    const { coins, signer, router, factory, weth } = useContext(Contracts);
 
     const switchFields = () => {
         setAmnt1(amnt2);
@@ -44,8 +47,8 @@ const Swap = () => {
         const parsedInput2 = parseFloat(amnt2);
         return (
         cur1 && cur2 &&
-        coins[cur1].address &&
-        coins[cur2].address &&
+        cur1.address &&
+        cur2.address &&
         !isNaN(parsedInput1) &&
         !isNaN(parsedInput2) &&
         0 < parsedInput1 
@@ -56,6 +59,20 @@ const Swap = () => {
     const handleSwap = () => {
         //SwapTokens(addr1, addr2, amnt1, routerContract , account, getSigner(account, library))
     }
+
+    
+  useEffect(() => {
+    if (cur1?.address && cur2?.address && factory) {
+        console.log(
+            "Trying to get Reserves between:\n" + cur1?.address + "\n" + cur2?.address
+        );
+
+        getReserves(cur1?.address, cur2?.address, factory as Contract, signer as JsonRpcSigner, account ?? "").then(
+            (data: any) => setReserves(data)
+        );
+    }
+    console.log({factory, router, weth})
+  }, [cur1?.address, cur2?.address, account, factory, router, signer]);
 
     return (
         <Box maxW={500} w="100%" p={4} borderRadius="20px" bg="rgb(25, 27, 31)">

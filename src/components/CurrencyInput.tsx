@@ -1,23 +1,27 @@
 import { Flex, NumberInput, NumberInputField, Select,  } from '@chakra-ui/react';
-import { getNetwork } from '@ethersproject/networks';
 import { useWeb3React } from '@web3-react/core';
-import { useState, ChangeEventHandler, ChangeEvent } from 'react';
+import { useState, ChangeEventHandler, ChangeEvent, useContext } from 'react';
 
-import { ROPSTENCoins as coins } from 'utils/constants/coins';
+import { Contracts } from 'context/Contracts'
+import { Coin } from 'type';
 
-const CurrencySelect = ({currency, setCurrency, excludeCurrency}: {currency: string, setCurrency: (val:string) => void, excludeCurrency?: string}) => {
+const CurrencySelect = (
+        {currency, setCurrency, excludeCurrency}: 
+        {currency?: Coin, setCurrency: (val:Coin) => void, excludeCurrency?: Coin}
+    ) => {
 
+    const { coins } = useContext(Contracts);
 
     const handleCurrency:ChangeEventHandler<HTMLSelectElement> = (e: ChangeEvent<HTMLSelectElement>) => {
-        setCurrency(e.target.value)
+        setCurrency(coins[parseInt(e.target.value)])
     }
-    
+
     return (
-    <Select widht="200px" placeholder='Select Currency' value={currency} onChange={handleCurrency}>
+    <Select widht="200px" placeholder='Select Currency' onChange={handleCurrency}>
         {
-            coins.map((coin,idx: number) => (
-                excludeCurrency !== coin.abbr &&
-                <option key={idx} value={coin.abbr}>{coin.abbr}</option>
+            coins && coins.map((coin,idx: number) => (
+                excludeCurrency?.abbr !== coin.abbr &&
+                <option key={idx} value={idx} >{coin.abbr}</option>
             ))
         }
     </Select>
@@ -33,12 +37,12 @@ const CurrencyInput = (
     } : { 
         input: string,
         onChange: (v:string) => void, 
-        currency: string,
-        onCurrencyChange: (v:string) => void,
-        excludeCurrency ?: string 
+        currency?: Coin,
+        onCurrencyChange: (v:Coin) => void,
+        excludeCurrency ?: Coin 
     }) => {
 
-    const handleCurrencyChange = (val:string) => {
+    const handleCurrencyChange = (val:Coin) => {
         onCurrencyChange(val);
     }
     const handleInputChange = (data: string) => {
