@@ -15,7 +15,6 @@ export const injected = new InjectedConnector({ supportedChainIds: [3] }); // on
 export function fetcher (lib: any) {
     return function(...args: any) {
         const [method, ...params] = args;
-        console.log({ method, params });
         return lib[method](...params);
     }
 }
@@ -172,20 +171,30 @@ export async function getReserves(
   signer: JsonRpcSigner | Web3Provider,
   accAddr: string
 ) {
-    const pairAddr = await factory.getPair(addr1, addr2);
-    const pair = new Contract(pairAddr, PAIR.abi, signer);
+    try {
+        const pairAddr = await factory.getPair(addr1, addr2);
+        const pair = new Contract(pairAddr, PAIR.abi, signer);
 
-    const reservesRaw = await fetchReserves(addr1, addr2, pair);
-    const liquidityTokens_BN = await pair.balancecOf(accAddr);
-    const liquidityTokens = Number(
-        formatEther(liquidityTokens_BN)
-    ).toFixed(2);
+        if (pairAddr !== '0x0000000000000000000000000000000000000000'){
 
-    return [
-        reservesRaw[0].toFixed(2),
-        reservesRaw[1].toFixed(2),
-        liquidityTokens
-    ]
+            const reservesRaw = await fetchReserves(addr1, addr2, pair);
+            const liquidityTokens_BN = await pair.balancecOf(accAddr);
+            const liquidityTokens = Number(
+                formatEther(liquidityTokens_BN)
+            ).toFixed(2);
 
-
+            return [
+                reservesRaw[0].toFixed(2),
+                reservesRaw[1].toFixed(2),
+                liquidityTokens
+            ]
+        }  else {
+                console.log("no reserves yet");
+                return [0,0,0];
+            }
+    }catch (err) {
+        console.log("error!");
+        console.log(err);
+        return [0, 0, 0];
+    }
 }

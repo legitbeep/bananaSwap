@@ -71,7 +71,6 @@ const Swap = () => {
             (data: any) => setReserves(data)
         );
     }
-    console.log({factory, router, weth})
   }, [cur1?.address, cur2?.address, account, factory, router, signer]);
 
     return (
