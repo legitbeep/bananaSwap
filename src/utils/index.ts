@@ -2,7 +2,7 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import { getAddress } from '@ethersproject/address'
 import { Web3Provider, JsonRpcSigner } from "@ethersproject/providers";
 import { Contract } from "@ethersproject/contracts";
-import { formatEther, parseEther } from "@ethersproject/units";
+import { formatEther, parseEther, parseUnits } from "@ethersproject/units";
 import { BigNumber } from "@ethersproject/bignumber";
 import COINS from "./constants/coins";
 
@@ -49,23 +49,28 @@ export function shortenAddress(address: string, chars = 4): string {
 }
 
 export async function getBalAndSym(
+    accountAddress: string,
     address: string,
-    accAddr: string,
+    provider: Web3Provider,
     signer: JsonRpcSigner,
-    abi: any
+    weth_address: string,
 ){
-    try{ 
-        const token = new Contract(address, abi, signer);
-        const balRaw = await token.balanceOf(accAddr);
-        const symbol = await token.symbol();
-        return {
-            balance: formatEther(balRaw) ,
-            symbol
-        } 
-    } catch(err) {
+    try {
+        if (address === weth_address) {
+          const balanceRaw = await provider.getBalance(accountAddress);
+    
+          return formatEther(balanceRaw)
+        } else {
+          const token = new Contract(address, ERC20.abi, signer);
+          const tokenDecimals = await getDecimals(token);
+          const balanceRaw = await token.balanceOf(accountAddress);
+    
+          return (balanceRaw*10**(-tokenDecimals)).toString();
+        }
+      } catch(err) {
         console.log(err)
     }
-    return null;
+    return "0";
 }
 
 //  Calls different function on Router contract:
@@ -123,20 +128,40 @@ export async function SwapTokens(
     }
 }
 
+
+
+export async function getDecimals(token: Contract) {
+    const decimals = await token.decimals().then((result: any) => {
+        return result;
+      }).catch((err:any) => {
+        console.log('No tokenDecimals function for this token, set to 0');
+        return 0;
+      });
+      return decimals;
+  }  
+
 // preview swap using router contract and return amount out
 export async function getAmountOut(
     addr1: string,
     addr2: string,
     amntIn: string,
-    routerContract: Contract
+    routerContract: Contract,
+    signer: JsonRpcSigner
   ) {
     try {
-      const values_out = await routerContract.getAmountsOut(
-        parseEther(amntIn),
-        [addr1, addr2]
-      );
-      const amount_out = formatEther(values_out[1]);
-      return Number(amount_out);
+        const token1 = new Contract(addr1, ERC20.abi, signer);
+        const token1Decimals = await getDecimals(token1);
+    
+        const token2 = new Contract(addr2, ERC20.abi, signer);
+        const token2Decimals = await getDecimals(token2);
+    
+        const values_out = await routerContract.getAmountsOut(
+          parseUnits(String(amntIn), token1Decimals),
+          [addr1, addr2]
+        );
+        const amount_out = values_out[1]*10**(-token2Decimals);
+        console.log('amount out: ', amount_out)
+        return Number(amount_out);
     } catch {
       return false;
     }
@@ -145,7 +170,7 @@ export async function getAmountOut(
 export async function fetchReserves(
     addr1 : string,
     addr2 : string,
-    pair: any
+    pair: Contract
 ) {
     try {
         const reservesRaw = await pair.getReserves();
@@ -172,26 +197,25 @@ export async function getReserves(
   accAddr: string
 ) {
     try {
-        const pairAddr = await factory.getPair(addr1, addr2);
-        const pair = new Contract(pairAddr, PAIR.abi, signer);
-
-        if (pairAddr !== '0x0000000000000000000000000000000000000000'){
-
+        const pairAddress = await factory.getPair(addr1, addr2);
+        const pair = new Contract(pairAddress, PAIR.abi, signer);
+    
+        if (pairAddress !== '0x0000000000000000000000000000000000000000'){
             const reservesRaw = await fetchReserves(addr1, addr2, pair);
-            const liquidityTokens_BN = await pair.balancecOf(accAddr);
+            const liquidityTokens_BN = await pair.balanceOf(accAddr);
             const liquidityTokens = Number(
                 formatEther(liquidityTokens_BN)
-            ).toFixed(2);
+            );
 
             return [
-                reservesRaw[0].toFixed(2),
-                reservesRaw[1].toFixed(2),
-                liquidityTokens
-            ]
-        }  else {
-                console.log("no reserves yet");
-                return [0,0,0];
-            }
+                reservesRaw[0].toPrecision(6),
+                reservesRaw[1].toPrecision(6),
+                liquidityTokens,
+            ];
+        } else {
+            console.log("no reserves yet");
+            return [0,0,0];
+        }
     }catch (err) {
         console.log("error!");
         console.log(err);
