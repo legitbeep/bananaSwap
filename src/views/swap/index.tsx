@@ -63,7 +63,7 @@ const Swap = () => {
 
 
     const handleSwap = () => {
-        console.log("Attempting to swap tokens...");
+        console.log("Attempting to swap tokens...", cur1?.address, cur2?.address);
         setLoading(true);
         if ( router && account && signer ) {
             SwapTokens(
@@ -80,14 +80,15 @@ const Swap = () => {
                 // If the transaction was successful, we clear to input to make sure the user doesn't accidental redo the transfer
                 setAmnt1("");
                 toast({
-                    title: 'Success',
-                    description: "Transaction Successfull.",
+                    title: 'Tx Success',
+                    description: "Coins Swapped.",
                     status: 'success',
                     duration: 5000,
                     isClosable: true,
                     })
                 })
                 .catch((e) => {
+                    console.log(e);
                     setLoading(false);
                     toast({
                         title: 'Error',

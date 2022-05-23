@@ -18,7 +18,7 @@ export function useSigner (msg?:any) {
 }
 
 
-export function useSwapper() {
+export function useContracts() {
     const { library,...web3React } = useWeb3React();
     const [signer, setSigner] = useState(getSignerOrProvider(library));
     const [account, setAccount] = useState(undefined); // This is populated in a hook
@@ -34,4 +34,6 @@ export function useSwapper() {
     const [factory, setFactory] = useState(
         getFactoryContract("0x4EDFE8706Cefab9DCd52630adFFd00E9b93FF116", signer)
     );
+
+    return [router, weth, factory];
 }

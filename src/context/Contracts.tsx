@@ -104,6 +104,10 @@ const ContractsProvider: React.FC = ({children}) => {
       } 
   },[router, signer])
 
+  useEffect(() => {
+    setupConnection();
+  },[])
+
   return (
     <Contracts.Provider value={{signer, factory, router, coins, weth}}>
       {children}

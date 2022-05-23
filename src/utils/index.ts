@@ -95,36 +95,40 @@ export async function SwapTokens(
         tokens
     );
 
-    const token1 = new Contract(addr1, ERC20.abi, signer)
-    token1.approve(routerContract.address, amntIn);
-
-    // @ts-ignore
-    if ( addr1 === COINS.AUTONITY.address ){
-        await routerContract.swapExactETHForTokens(
-            amntOut[1],
-            tokens,
-            accAddr,
-            deadline,
-            { value: amntIn }
-        );
-    // @ts-ignore
-    } else if ( addr2 === COINS.AUTONITY.address ){
-        await routerContract.swapExactTokensForETH(
-            amntIn,
-            amntOut[1],
-            tokens,
-            accAddr,
-            deadline,
-        );
-    } else {
-
-        await routerContract.swapExactTokensForTokens(
-            amntIn,
-            amntOut[1],
-            tokens,
-            accAddr,
-            deadline
-          );
+    try {
+        const token1 = new Contract(addr1, ERC20.abi, signer)
+        token1.approve(routerContract.address, amntIn);
+        console.log(COINS.get(3));
+        // @ts-ignore
+        if ( addr1 === COINS.get(3)[0].address ){
+            await routerContract.swapExactETHForTokens(
+                amntOut[1],
+                tokens,
+                accAddr,
+                deadline,
+                { value: amntIn }
+            );
+        // @ts-ignore
+        } else if ( addr2 === COINS.get(3)[0].address ){
+            await routerContract.swapExactTokensForETH(
+                amntIn,
+                amntOut[1],
+                tokens,
+                accAddr,
+                deadline,
+            );
+        } else {
+    
+            await routerContract.swapExactTokensForTokens(
+                amntIn,
+                amntOut[1],
+                tokens,
+                accAddr,
+                deadline
+              );
+        }
+    } catch (e) {
+        console.log(e)
     }
 }
 
