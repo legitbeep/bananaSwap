@@ -101,7 +101,7 @@ export async function SwapTokens(
         console.log(COINS.get(3));
         // @ts-ignore
         if ( addr1 === COINS.get(3)[0].address ){
-            await routerContract.swapExactETHForTokens(
+            return routerContract.swapExactETHForTokens(
                 amntOut[1],
                 tokens,
                 accAddr,
@@ -110,7 +110,7 @@ export async function SwapTokens(
             );
         // @ts-ignore
         } else if ( addr2 === COINS.get(3)[0].address ){
-            await routerContract.swapExactTokensForETH(
+            return routerContract.swapExactTokensForETH(
                 amntIn,
                 amntOut[1],
                 tokens,
@@ -119,7 +119,7 @@ export async function SwapTokens(
             );
         } else {
     
-            await routerContract.swapExactTokensForTokens(
+            return routerContract.swapExactTokensForTokens(
                 amntIn,
                 amntOut[1],
                 tokens,
@@ -128,7 +128,7 @@ export async function SwapTokens(
               );
         }
     } catch (e) {
-        console.log(e)
+        return new Error("Transaction Failed!")
     }
 }
 
